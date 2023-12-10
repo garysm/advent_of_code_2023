@@ -1,20 +1,48 @@
-import 'dart:io';
+const Map<String, String> digitStringValues = {
+  'one': '1',
+  'two': '2',
+  'three': '3',
+  'four': '4',
+  'five': '5',
+  'six': '6',
+  'seven': '7',
+  'eight': '8',
+  'nine': '9',
+};
 
-Future<int> solvePart1(String filePath) async {
-  solvePart1('../input.txt');
-  final input = File('../input.txt');
-  final contents = await input.readAsLines();
-  return calculateCalibrationSum(contents);
+int solvePart1(List<String> fileContents) {
+  return calculateCalibrationSum(
+    fileContents,
+    regexp: RegExp(r'([1-9])'),
+  );
 }
 
-int calculateCalibrationSum(List<String> input) {
-  final regexp = RegExp(r'([1-9])');
+int solvePart2(List<String> fileContents) {
+  return calculateCalibrationSum(
+    fileContents,
+    regexp: RegExp(r'([1-9]|one|two|three|four|five|six|seven|eight|nine)'),
+  );
+}
+
+int calculateCalibrationSum(List<String> input, {required RegExp regexp}) {
   int sum = 0;
   for (var string in input) {
+    if (!regexp.hasMatch(string)) return 0;
     final digits = regexp.allMatches(string);
-    if (digits.isEmpty) return 0;
-    final number = int.parse('${digits.first[0]!}${digits.last[0]!}');
+    String firstDigit = digits.first[0]!;
+    String lastDigit = digits.last[0]!;
+    firstDigit = checkSpelledOut(firstDigit);
+    lastDigit = checkSpelledOut(lastDigit);
+
+    final number = int.parse('$firstDigit$lastDigit');
     sum += number;
   }
   return sum;
+}
+
+String checkSpelledOut(String digit) {
+  if (digitStringValues.keys.contains(digit)) {
+    return digitStringValues[digit]!;
+  }
+  return digit;
 }
