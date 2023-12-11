@@ -20,17 +20,17 @@ int solvePart1(List<String> fileContents) {
 int solvePart2(List<String> fileContents) {
   return calculateCalibrationSum(
     fileContents,
-    regexp: RegExp(r'([1-9]|one|two|three|four|five|six|seven|eight|nine)'),
+    regexp: RegExp(r'(?=([1-9]|one|two|three|four|five|six|seven|eight|nine))'),
   );
 }
 
 int calculateCalibrationSum(List<String> input, {required RegExp regexp}) {
   int sum = 0;
-  for (var string in input) {
+  for (final string in input) {
     if (!regexp.hasMatch(string)) return 0;
-    final digits = regexp.allMatches(string);
-    String firstDigit = digits.first[0]!;
-    String lastDigit = digits.last[0]!;
+    final matches = regexp.allMatches(string);
+    String firstDigit = matches.first[1]!;
+    String lastDigit = matches.last[1]!;
     firstDigit = checkSpelledOut(firstDigit);
     lastDigit = checkSpelledOut(lastDigit);
 
