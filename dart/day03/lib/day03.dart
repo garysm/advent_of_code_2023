@@ -1,9 +1,9 @@
 void solvePart1(List<String> fileContents) {
   int sum = 0;
   final List<List<String?>> inputGrid = List<List<String?>>.generate(
-    140,
+    fileContents.length,
     (i) => List<String?>.generate(
-      140,
+      fileContents[i].length,
       (index) => null,
       growable: false,
     ),
@@ -17,7 +17,7 @@ void solvePart1(List<String> fileContents) {
     }
   }
   final numberRegex = RegExp(r'(\d+)');
-  final symbolRegex = RegExp(r'([-!$%^&*()_+|~=`{}\[\]:;<>?#@,\/])');
+  final symbolRegex = RegExp(r'([-$%&*+~=?#@\/])');
 
   for (int i = 0; i < inputGrid.length; i++) {
     final line = fileContents[i];
@@ -26,7 +26,9 @@ void solvePart1(List<String> fileContents) {
       bool symbolAdjacent = false;
       final numberString = match[0]!;
       final numberValue = int.parse(numberString);
-      final numberStartIndex = line.indexOf(numberString);
+      int numberStartIndex = line.indexOf(numberString);
+      final numberStringMatches = numberString.allMatches(line);
+      if (numberStringMatches.length > 1) {}
       final numberEndIndex = numberStartIndex - 1 + numberString.length;
       // Check surrounding characters for symbols
       // Check above the number for adjacent symbols
